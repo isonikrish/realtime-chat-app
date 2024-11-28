@@ -1,6 +1,9 @@
 import { generateToken } from '../lib/utils.js';
 import User from '../models/user.js';
 import bcrypt from 'bcryptjs'
+import cloudinary from '../lib/cloudinary.js'
+
+
 export async function handleSignup(req, res) {
     const { fullName, email, password } = req.body;
     try {
@@ -50,5 +53,32 @@ export async function handleLogin(req, res) {
     }
 }
 export async function handleLogout(req, res) {
-
+    try {
+        res.cookie("jwt", "",{maxAge: 0});
+        res.status(200).json({msg: "LoggedOut successfully"})
+    } catch (error) {
+        res.status(500).json({ msg: "Internal server error" });
+    }
+}
+export async function handleUpdateProfile(req,res){
+    try {
+        const {profilePic} = req.body;
+        const userId = req.user._id;
+        if (!profilePic) {
+            return res.status(400).json({ msg: "Profile Pic is required" })
+        }
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic: uploadResponse.secure_url},{new:true});
+        res.status(200).json(updatedUser)
+    } catch (error) {
+        res.status(500).json({ msg: "Internal server error" });
+    }
+}
+export async function handleCheckAuth(req,res){
+    try {
+        res.status(200).json(req.user)    
+    } catch (error) {
+        res.status(500).json({ msg: "Internal server error" });
+    }
+    
 }
