@@ -17,7 +17,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen mt-14">
+    <div className="mt-14">
       {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">

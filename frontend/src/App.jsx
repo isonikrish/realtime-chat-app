@@ -9,8 +9,10 @@ import Profile from './pages/Profile.jsx'
 import Home from './pages/Home.jsx'
 import { useAuth } from './store/useAuth.js'
 import { Toaster } from 'react-hot-toast'
+import { useTheme } from './store/useTheme.js'
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuth();
+  const {theme} = useTheme();
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
@@ -18,8 +20,9 @@ function App() {
   if (isCheckingAuth) {
     return (<div>Loading....</div>)
   }
+  
   return (
-    <div>
+    <div data-theme={theme? theme :"coffee"}>
       <Navbar />
       <Routes>
         <Route path='/' element={authUser ? <Home /> : <Navigate to={'/login'} />} />

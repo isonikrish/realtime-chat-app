@@ -28,7 +28,7 @@ function Signup() {
     if(success === true) signup(formData)
   }
   return (
-    <div className='min-h-screen mt-14'>
+    <div className='mt-14'>
       <div className='flex flex-col justify-center items-center p-6 sm:p12'>
         <div className='w-full max-w-md space-y-8'>
           {/* LOGO */}
