@@ -46,7 +46,7 @@ export async function handleLogin(req, res) {
         if (!isPasswordCorrect) return res.status(400).json({ msg: "Invalid password" });
 
         generateToken(user._id,res);
-        res.status(200).json({msg: "Logged In"})
+        res.status(200).json(user)
 
     } catch (error) {
         res.status(500).json({ msg: "Internal server error" });

@@ -1,6 +1,7 @@
 import Message from "../models/message.js";
 import User from "../models/user.js";
 import cloudinary from "../lib/cloudinary.js";
+import { getRecieverSocketId, io } from "../lib/socket.js";
 export async function handleGetUsersForSidebar(req, res) {
   try {
     const loggedUserId = req.user._id;
@@ -44,7 +45,10 @@ export async function handleSendmessages(req, res) {
       image: imageUrl,
     });
     await newMessage.save();
-
+    const recieverSocketId = getRecieverSocketId(receiverId);
+    if (recieverSocketId) {
+      io.to(recieverSocketId).emit("newMessage", newMessage);
+    }
     res.status(200).json(newMessage);
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
